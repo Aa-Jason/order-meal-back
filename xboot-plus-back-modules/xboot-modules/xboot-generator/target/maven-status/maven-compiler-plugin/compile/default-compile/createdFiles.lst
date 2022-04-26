@@ -1,0 +1,6 @@
+cn\exrick\xboot\generator\bean\Entity.class
+cn\exrick\xboot\generator\vue\XbootVueGenerator.class
+cn\exrick\xboot\generator\bean\Field.class
+cn\exrick\xboot\generator\XbootGenerator.class
+cn\exrick\xboot\generator\XbootMPGenerator.class
+cn\exrick\xboot\generator\bean\Item.class

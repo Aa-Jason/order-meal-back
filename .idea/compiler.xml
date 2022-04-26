@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="xboot-core" />
+        <module name="xboot-app" />
+        <module name="xboot-quartz" />
+        <module name="xboot-activiti" />
+        <module name="xboot-base" />
+        <module name="xboot-open" />
+        <module name="xboot-your" />
+        <module name="xboot-generator" />
+        <module name="xboot-file" />
+        <module name="xboot-social" />
+        <module name="xboot-admin" />
+        <module name="xboot-autochat" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="xboot-activiti" target="1.8" />
+      <module name="xboot-admin" target="1.8" />
+      <module name="xboot-app" target="1.8" />
+      <module name="xboot-autochat" target="1.8" />
+      <module name="xboot-base" target="1.8" />
+      <module name="xboot-core" target="1.8" />
+      <module name="xboot-file" target="1.8" />
+      <module name="xboot-generator" target="1.8" />
+      <module name="xboot-modules" target="1.8" />
+      <module name="xboot-open" target="1.8" />
+      <module name="xboot-plus-modules" target="1.8" />
+      <module name="xboot-quartz" target="1.8" />
+      <module name="xboot-social" target="1.8" />
+      <module name="xboot-your" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

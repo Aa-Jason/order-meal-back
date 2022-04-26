@@ -58,4 +58,11 @@ public interface UserDao extends XbootBaseDao<User, String> {
     @Modifying
     @Query("update User u set u.departmentTitle=?2 where u.departmentId=?1")
     void updateDepartmentTitle(String departmentId, String departmentTitle);
+
+    /**
+     * 按照用户名搜索
+     * @param nickname
+     * @return
+     */
+    List<User> findByNickname(String nickname);
 }

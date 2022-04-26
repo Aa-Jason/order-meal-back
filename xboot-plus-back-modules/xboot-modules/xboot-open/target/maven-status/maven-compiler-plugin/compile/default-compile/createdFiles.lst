@@ -1,0 +1,8 @@
+cn\exrick\xboot\open\vo\Oauth2TokenInfo.class
+cn\exrick\xboot\open\controller\ClientController.class
+cn\exrick\xboot\open\controller\Oauth2Controller.class
+cn\exrick\xboot\open\serviceimpl\ClientServiceImpl.class
+cn\exrick\xboot\open\serviceimpl\ClientServiceImpl$1.class
+cn\exrick\xboot\open\dao\ClientDao.class
+cn\exrick\xboot\open\entity\Client.class
+cn\exrick\xboot\open\service\ClientService.class

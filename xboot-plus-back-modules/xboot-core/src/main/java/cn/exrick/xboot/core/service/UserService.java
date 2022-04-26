@@ -66,4 +66,11 @@ public interface UserService extends XbootBaseService<User, String> {
      * @param departmentTitle
      */
     void updateDepartmentTitle(String departmentId, String departmentTitle);
+
+    /**
+     * 根据姓名返回用户ID
+     * @param nickname
+     * @return
+     */
+    List<String>  findIdByNickname(String nickname);
 }

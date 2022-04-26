@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-admin/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-admin/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-core/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-activiti/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-activiti/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-app/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-autochat/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-autochat/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-base/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-file/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-generator/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-generator/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-open/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-quartz/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-social/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-your/src/main/java" charset="UTF-8" />
+  </component>
+</project>

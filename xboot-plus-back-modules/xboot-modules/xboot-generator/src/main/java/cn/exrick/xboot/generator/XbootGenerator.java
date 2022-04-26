@@ -33,13 +33,13 @@ public class XbootGenerator {
      * 实体类名
      * 建议仅需修改
      */
-    private static final String CLASS_NAME = "Student";
+    private static final String CLASS_NAME = "order";
 
     /**
      * 类说明描述
      * 建议仅需修改
      */
-    private static final String DESCRIPTION = "测试";
+    private static final String DESCRIPTION = "点餐";
 
     /**
      * 作者名
@@ -74,7 +74,7 @@ public class XbootGenerator {
      * 生成模块路径
      * (文件自动生成至该模块下)
      */
-    private static final String MODULE = "/xboot-modules/xboot-your";
+    private static final String MODULE = "/xboot-plus-back-modules/xboot-modules/xboot-your";
 
     /**
      * 模块包路径
@@ -129,14 +129,14 @@ public class XbootGenerator {
         Configuration cfg = Configuration.defaultConfiguration();
         GroupTemplate gt = new GroupTemplate(resourceLoader, cfg);
 
-        // 生成代码
+//         生成代码
         generateCode(gt);
 
         // 读取你的实体类中的字段，补充生成条件构造分页查询代码【需自行复制控制台打印输出的代码自行覆盖】
         generatePlus(gt);
 
         // 根据类名删除生成的代码
-        // deleteCode(className);
+//        deleteCode("order");
     }
 
     /**

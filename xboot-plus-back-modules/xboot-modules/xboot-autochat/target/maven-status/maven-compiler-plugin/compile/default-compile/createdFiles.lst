@@ -1,0 +1,17 @@
+cn\exrick\xboot\autochat\dao\AutoChatDao.class
+cn\exrick\xboot\autochat\serviceimpl\AutoChatServiceImpl$1.class
+cn\exrick\xboot\autochat\vo\RecommendVo.class
+cn\exrick\xboot\autochat\service\AutoChatService.class
+cn\exrick\xboot\autochat\vo\GuessVo.class
+cn\exrick\xboot\autochat\vo\Evaluable.class
+cn\exrick\xboot\autochat\controller\AutoChatController.class
+cn\exrick\xboot\autochat\entity\AutoChat.class
+cn\exrick\xboot\autochat\serviceimpl\AutoChatServiceImpl.class
+cn\exrick\xboot\autochat\vo\MessageVo.class
+cn\exrick\xboot\autochat\vo\AssociateVo.class
+cn\exrick\xboot\autochat\vo\ListVo.class
+cn\exrick\xboot\autochat\vo\PromotionVo.class
+cn\exrick\xboot\autochat\vo\CardVo.class
+cn\exrick\xboot\autochat\dao\mapper\AutoChatMapper.class
+cn\exrick\xboot\autochat\vo\TextVo.class
+cn\exrick\xboot\autochat\vo\ArrayVo.class

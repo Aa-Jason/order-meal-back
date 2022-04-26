@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/order.iml" filepath="$PROJECT_DIR$/.idea/order.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-activiti/xboot-activiti.iml" filepath="$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-activiti/xboot-activiti.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-admin/xboot-admin.iml" filepath="$PROJECT_DIR$/xboot-plus-back-modules/xboot-admin/xboot-admin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-app/xboot-app.iml" filepath="$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-app/xboot-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-autochat/xboot-autochat.iml" filepath="$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-autochat/xboot-autochat.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-base/xboot-base.iml" filepath="$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-base/xboot-base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-core/xboot-core.iml" filepath="$PROJECT_DIR$/xboot-plus-back-modules/xboot-core/xboot-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-file/xboot-file.iml" filepath="$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-file/xboot-file.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-generator/xboot-generator.iml" filepath="$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-generator/xboot-generator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-modules.iml" filepath="$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-modules.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-open/xboot-open.iml" filepath="$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-open/xboot-open.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-plus-modules.iml" filepath="$PROJECT_DIR$/xboot-plus-back-modules/xboot-plus-modules.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-quartz/xboot-quartz.iml" filepath="$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-quartz/xboot-quartz.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-social/xboot-social.iml" filepath="$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-social/xboot-social.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-your/xboot-your.iml" filepath="$PROJECT_DIR$/xboot-plus-back-modules/xboot-modules/xboot-your/xboot-your.iml" />
+    </modules>
+  </component>
+</project>

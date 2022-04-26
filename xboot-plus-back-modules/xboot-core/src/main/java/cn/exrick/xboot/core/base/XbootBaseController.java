@@ -79,4 +79,5 @@ public abstract class XbootBaseController<E, ID extends Serializable> {
         }
         return ResultUtil.success("批量通过id删除数据成功");
     }
+
 }
