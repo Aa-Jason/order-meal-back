@@ -113,18 +113,21 @@ public class OrderController extends XbootBaseController<Order, String> {
         return ResultUtil.success(message);
     }
 
-    @RequestMapping(value = "/getByConditions", method = RequestMethod.GET)
+    @RequestMapping(value = "/getByConditions", method = RequestMethod.POST)
     @ApiOperation(value = "按条件查询")
     public Result<List<Order>> getByConditions(String nickname, String departmentTitle, SearchVo searchVo){
-        List<String> IDs;
-
+        List<String> IDs = new ArrayList<>();
+        System.out.println(nickname.isEmpty() && departmentTitle.isEmpty());
         if (nickname.isEmpty() && departmentTitle.isEmpty()){
+            System.out.println("用户名和部门名为空");
             List<Order> orders = orderService.findByDate(searchVo);
             return new ResultUtil<List<Order>>().setData(orders);
         }
         if (nickname.isEmpty()){
+            System.out.println("用户名为空");
             IDs = userService.findByDepartmentTitle(departmentTitle);
         }else {
+            System.out.println("部门名为空");
             IDs = userService.findByDepartmentTitleAndNickname(departmentTitle, nickname);
         }
 

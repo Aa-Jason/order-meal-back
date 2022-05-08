@@ -203,6 +203,7 @@ public class SecurityUtil {
                     .signWith(SignatureAlgorithm.HS512, SecurityConstant.JWT_SIGN_KEY)
                     .compact();
         }
+
         // 记录日志使用
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(tokenUser, null, null);
         SecurityContextHolder.getContext().setAuthentication(authentication);

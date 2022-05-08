@@ -71,16 +71,18 @@ public class OrderServiceImpl implements OrderService {
         List<Order> orders = new ArrayList<>();
         while (start.before(end) || start.equals(end)){
             List<Order> obj = orderDao.findByDate(start);
-            Order order = new Order();
-            for (Order order1:
-                 obj) {
-                order.setDate(order1.getDate());
-                order.setBreakfast(order.getBreakfast()+order1.getBreakfast());
-                order.setLunch(order.getLunch()+order1.getLunch());
-                order.setDinner(order.getDinner() + order1.getDinner());
+            if (obj != null) {
+                Order order = new Order();
+                for (Order order1 :
+                        obj) {
+                    order.setDate(order1.getDate());
+                    order.setBreakfast(order.getBreakfast() + order1.getBreakfast());
+                    order.setLunch(order.getLunch() + order1.getLunch());
+                    order.setDinner(order.getDinner() + order1.getDinner());
 
+                }
+                orders.add(order);
             }
-            orders.add(order);
             Calendar cal = Calendar.getInstance();
             cal.setTime(start);
             cal.add(Calendar.DATE, 1);
@@ -136,9 +138,6 @@ public class OrderServiceImpl implements OrderService {
             for (String id :
                     IDs) {
                 Order order1 = orderDao.findByStaffIDAndDate(id, start);
-                if (order1 == null){
-                    continue;
-                }
                 order.setBreakfast(order.getBreakfast()+order1.getBreakfast());
                 order.setLunch(order.getLunch()+order1.getLunch());
                 order.setDinner(order.getDinner() + order1.getDinner());

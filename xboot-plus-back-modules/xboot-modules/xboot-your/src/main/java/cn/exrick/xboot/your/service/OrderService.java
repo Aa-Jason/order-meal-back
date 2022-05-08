@@ -52,6 +52,7 @@ public interface OrderService extends XbootBaseService<Order, String> {
      */
     boolean checkOrder(String staffID,Date date);
 
+
     /**
      * 根据员工id返回订餐信息
      * @param strings
@@ -66,6 +67,5 @@ public interface OrderService extends XbootBaseService<Order, String> {
      * @return
      */
     List<Order> findByIDsAndDate(List<String> IDs,SearchVo searchVo);
-
 
 }
