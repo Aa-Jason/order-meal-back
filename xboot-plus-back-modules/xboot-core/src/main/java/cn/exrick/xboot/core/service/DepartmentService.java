@@ -34,4 +34,10 @@ public interface DepartmentService extends XbootBaseService<Department, String> 
      * @return
      */
     List<Department> findByTitleLikeOrderBySortOrder(String title, Boolean openDataFilter);
+
+    /**
+     * 返回所有部门的部门名
+     * @return
+     */
+    List<String> findAllname();
 }

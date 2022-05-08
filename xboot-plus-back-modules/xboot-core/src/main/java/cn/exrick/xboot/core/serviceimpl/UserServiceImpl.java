@@ -158,13 +158,25 @@ public class UserServiceImpl implements UserService {
         userDao.updateDepartmentTitle(departmentId, departmentTitle);
     }
 
-    public List<String> findIdByNickname(String nickname) {
-        List<String> strings = new ArrayList<>();
-        List<User> users = userDao.findByNickname(nickname);
+    @Override
+    public List<String> findByDepartmentTitle(String title) {
+        List<User> users = userDao.findByDepartmentTitle(title);
+        List<String> IDs = new ArrayList<>();
         for (User u :
                 users) {
-            strings.add(u.getId());
+            IDs.add(u.getId());
         }
-        return strings;
+        return IDs;
+    }
+
+    @Override
+    public List<String> findByDepartmentTitleAndNickname(String title, String nickname) {
+        List<User> users = userDao.findByDepartmentTitleAndNickname(title,nickname);
+        List<String> IDs = new ArrayList<>();
+        for (User u :
+                users) {
+            IDs.add(u.getId());
+        }
+        return IDs;
     }
 }

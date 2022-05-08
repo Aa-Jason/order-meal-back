@@ -126,7 +126,9 @@ public class SecurityUtil {
         User user;
         // 校验用户名
         if (NameUtil.mobile(username)) {
-            user = findUserByEmail(username);
+
+            user = findUserByMobile(username);
+
         } else if (NameUtil.email(username)) {
             user = findUserByEmail(username);
         } else {

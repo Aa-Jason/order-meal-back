@@ -49,4 +49,5 @@ public interface DepartmentDao extends XbootBaseDao<Department, String> {
      */
     List<Department> findByTitleLikeAndIdInOrderBySortOrder(String title, List<String> departmentIds);
 
+    List<Department> findAll();
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -57,5 +58,17 @@ public class DepartmentServiceImpl implements DepartmentService {
             return departmentDao.findByTitleLikeAndIdInOrderBySortOrder(title, depIds);
         }
         return departmentDao.findByTitleLikeOrderBySortOrder(title);
+    }
+
+    @Override
+    public List<String> findAllname() {
+        List<Department> departments = departmentDao.findAll();
+        List<String> names = new ArrayList<>();
+
+        for (Department d :
+                departments) {
+            names.add(d.getTitle());
+        }
+        return names;
     }
 }

@@ -94,7 +94,6 @@ public class AuthController {
             // 超过限制次数
             return ResultUtil.error("登录错误次数超过限制，请" + timeRest + "分钟后再试");
         }
-
         User user = securityUtil.checkUserPassword(username, password);
         if (user == null) {
             // 记录密码错误次数
@@ -118,6 +117,7 @@ public class AuthController {
         }
 
         String accessToken = securityUtil.getToken(user, saveLogin);
+
         return ResultUtil.data(accessToken);
     }
 
@@ -215,7 +215,6 @@ public class AuthController {
         u.setPassword(encryptPass).setType(UserConstant.USER_TYPE_NORMAL).setNickname(nickname);
 
         User user = userService.save(u);
-
         // 默认角色
         List<Role> roleList = roleService.findByDefaultRole(true);
         if (roleList != null && roleList.size() > 0) {

@@ -5,6 +5,7 @@ import cn.exrick.xboot.core.entity.User;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.sql.DataTruncation;
 import java.util.List;
 
 /**
@@ -65,4 +66,19 @@ public interface UserDao extends XbootBaseDao<User, String> {
      * @return
      */
     List<User> findByNickname(String nickname);
+
+    /**
+     * 按照部门名查找
+     * @param title
+     * @return
+     */
+    List<User> findByDepartmentTitle(String title);
+
+    /**
+     * 按照用户名和部门查找
+     * @param title
+     * @param nickname
+     * @return
+     */
+    List<User> findByDepartmentTitleAndNickname(String title,String nickname);
 }

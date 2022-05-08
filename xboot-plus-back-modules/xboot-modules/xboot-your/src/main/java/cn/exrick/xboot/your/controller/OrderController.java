@@ -15,6 +15,7 @@ import cn.exrick.xboot.core.service.UserService;
 import cn.exrick.xboot.your.dao.OrderDao;
 import cn.exrick.xboot.your.entity.Order;
 import cn.exrick.xboot.your.service.OrderService;
+import cn.hutool.core.date.DateUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,9 +31,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
+import javax.persistence.Lob;
 import javax.validation.Valid;
 import java.sql.Date;
 import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -67,14 +71,6 @@ public class OrderController extends XbootBaseController<Order, String> {
         return new ResultUtil<Page<Order>>().setData(page);
     }
 
-    // 根据选定的日期查询日期内订餐总数
-    @RequestMapping(value = "/getSumByDate", method = RequestMethod.GET)
-    @ApiOperation(value = "选定日期内订餐总数")
-    public Result<List<Order>> getSunByDate(SearchVo searchVo) {
-        List<Order> orders = orderService.findSumByDate(searchVo);
-        return new ResultUtil<List<Order>>().setData(orders);
-    }
-
     @RequestMapping(value = "/getByStaffIDAndDate", method = RequestMethod.GET)
     @ApiOperation(value = "当前用户选择日期内订餐情况")
     public Result<List<Order>> getByStaffIDAndDate(SearchVo searchVo) {
@@ -89,31 +85,52 @@ public class OrderController extends XbootBaseController<Order, String> {
     }
     @RequestMapping(value = "/addOrder", method = RequestMethod.POST)
     @ApiOperation(value = "当前用户添加订餐记录")
-    public Result<Object> addOrder(Order order,
-            @RequestParam(value = "date")Date date,
-            @RequestParam(value = "breakfast",required =true)int breakfast,
-                                   @RequestParam(value = "lunch",required =true)int lunch,
-                                   @RequestParam(value = "dinner",required =true)int dinner){
+    public Result<Object> addOrder(List<Order> orders
+//                                   @RequestParam(value = "date")Date date,
+//                                   @RequestParam(value = "breakfast",required =true)int breakfast,
+//                                   @RequestParam(value = "lunch",required =true)int lunch,
+//                                   @RequestParam(value = "dinner",required =true)int dinner
+                                   ) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication.getName() == null
                 || authentication instanceof AnonymousAuthenticationToken) {
             throw new XbootException("未检测到登录用户");
         }
         TokenUser tokenUser = (TokenUser) authentication.getPrincipal();
-        if (!orderService.checkOrder(tokenUser.getId(),order.getDate())){
-            order.setStaffID(tokenUser.getId());
-            order.setId(SnowFlakeUtil.nextId().toString());
-            orderService.save(order);
-            return ResultUtil.success("订餐成功");
+        String message = "";
+        for (Order o :
+                orders) {
+            if (!orderService.checkOrder(tokenUser.getId(), o.getDate())) {
+                o.setStaffID(tokenUser.getId());
+                o.setId(SnowFlakeUtil.nextId().toString());
+                orderService.save(o);
+                message = message + DateFormat.getDateInstance().format(o.getDate()) + "订餐成功";
+
+            } else {
+                message = message + DateFormat.getDateInstance().format(o.getDate()) + "订餐失败";
+            }
+        }
+        return ResultUtil.success(message);
+    }
+
+    @RequestMapping(value = "/getByConditions", method = RequestMethod.GET)
+    @ApiOperation(value = "按条件查询")
+    public Result<List<Order>> getByConditions(String nickname, String departmentTitle, SearchVo searchVo){
+        List<String> IDs;
+
+        if (nickname.isEmpty() && departmentTitle.isEmpty()){
+            List<Order> orders = orderService.findByDate(searchVo);
+            return new ResultUtil<List<Order>>().setData(orders);
+        }
+        if (nickname.isEmpty()){
+            IDs = userService.findByDepartmentTitle(departmentTitle);
         }else {
-            return ResultUtil.error("订餐失败，" + DateFormat.getDateInstance().format(order.getDate()) + "已订餐");
+            IDs = userService.findByDepartmentTitleAndNickname(departmentTitle, nickname);
         }
 
-    }
-    @RequestMapping(value = "/findOrderByUsername", method = RequestMethod.POST)
-    @ApiOperation(value = "按姓名查询订餐信息")
-    public List<Order> getByStaffIDAndDate(String nickname){
-        List<String> userIds = userService.findIdByNickname(nickname);
-        return orderService.findByStaffID(userIds);
+        List<Order> orders = orderService.findByIDsAndDate(IDs,searchVo);
+
+        return new ResultUtil<List<Order>>().setData(orders);
+        //        orderService.findByConditions(nickname,departmentTitle,searchVo);
     }
 }

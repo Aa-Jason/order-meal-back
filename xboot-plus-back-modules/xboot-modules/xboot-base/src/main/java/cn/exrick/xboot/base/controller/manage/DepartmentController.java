@@ -219,6 +219,13 @@ public class DepartmentController {
         return new ResultUtil<List<Department>>().setData(list);
     }
 
+    @RequestMapping(value = "/getDepartment", method = RequestMethod.GET)
+    @ApiOperation(value = "返回当前所有部门名")
+    public Result<List<String>> searchAll() {
+
+        List<String> name = departmentService.findAllname();
+        return new ResultUtil<List<String>>().setData(name);
+    }
     public void setInfo(List<Department> list) {
 
         // lambda表达式

@@ -2,6 +2,7 @@ package cn.exrick.xboot.your.service;
 
 import cn.exrick.xboot.core.base.XbootBaseDao;
 import cn.exrick.xboot.core.base.XbootBaseService;
+import cn.exrick.xboot.core.entity.User;
 import cn.exrick.xboot.your.dao.OrderDao;
 import cn.exrick.xboot.your.entity.Order;
 import org.aspectj.weaver.ast.Or;
@@ -32,7 +33,7 @@ public interface OrderService extends XbootBaseService<Order, String> {
      * @param searchVo
      * @return
      */
-    List<Order> findSumByDate(SearchVo searchVo);
+    List<Order> findByDate(SearchVo searchVo);
 
     /**
      * 查询该用户在查询日期范围内订餐情况
@@ -58,6 +59,13 @@ public interface OrderService extends XbootBaseService<Order, String> {
      */
     List<Order> findByStaffID(List<String> strings);
 
+    /**
+     * 根据日期范围返回选中员工的订餐情况
+     * @param IDs
+     * @param searchVo
+     * @return
+     */
+    List<Order> findByIDsAndDate(List<String> IDs,SearchVo searchVo);
 
 
 }

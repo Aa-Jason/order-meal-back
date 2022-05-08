@@ -241,7 +241,7 @@ captcha:
     - /xboot/oauth2/authorize # 开放平台认证接口
   # 短信验证码验证
   sms:
-    - /xboot/auth/register # 注册接口
+#    - /xboot/auth/register # 注册接口
     - /xboot/auth/smsLogin # 短信登录接口
     - /xboot/auth/resetByMobile # 手机重置密码
     - /xboot/user/changeMobile # 更换绑定手机
@@ -261,7 +261,7 @@ captcha:
 ignored:
   # 无需登录认证的请求
   urls:
-    - /xboot/login
+    - /xboot/department/getDepartment
     - /xboot/auth/**
     - /xboot/app/v1/**
     - /xboot/oauth2/**

@@ -42,4 +42,6 @@ public class Order extends XbootBaseEntity {
     @ApiModelProperty(value = "晚餐")
     private int dinner;
 
+
+
 }

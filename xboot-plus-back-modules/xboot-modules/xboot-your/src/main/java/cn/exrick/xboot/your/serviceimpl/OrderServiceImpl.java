@@ -1,5 +1,6 @@
 package cn.exrick.xboot.your.serviceimpl;
 
+import cn.exrick.xboot.core.entity.User;
 import cn.exrick.xboot.your.dao.OrderDao;
 import cn.exrick.xboot.your.entity.Order;
 import cn.exrick.xboot.your.service.OrderService;
@@ -16,11 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.Nullable;
 
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 import javax.persistence.criteria.*;
-import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * 点餐接口实现
@@ -67,20 +65,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> findSumByDate(SearchVo searchVo) {
-
+    public List<Order> findByDate(SearchVo searchVo) {
         Date start = DateUtil.parse(searchVo.getStartDate());
         Date end = DateUtil.parse(searchVo.getEndDate());
         List<Order> orders = new ArrayList<>();
         while (start.before(end) || start.equals(end)){
-            Order order = new Order();
             List<Order> obj = orderDao.findByDate(start);
-            for (Order ord: obj
-                 ) {
-                order.setDate(start);
-                order.setBreakfast(order.getBreakfast() + ord.getBreakfast());
-                order.setLunch(order.getLunch() + ord.getLunch());
-                order.setDinner(order.getDinner() + ord.getDinner());
+            Order order = new Order();
+            for (Order order1:
+                 obj) {
+                order.setDate(order1.getDate());
+                order.setBreakfast(order.getBreakfast()+order1.getBreakfast());
+                order.setLunch(order.getLunch()+order1.getLunch());
+                order.setDinner(order.getDinner() + order1.getDinner());
+
             }
             orders.add(order);
             Calendar cal = Calendar.getInstance();
@@ -123,6 +121,33 @@ public class OrderServiceImpl implements OrderService {
         for (String s :
                 strings) {
             orders.addAll(orderDao.findByStaffID(s));
+        }
+        return orders;
+    }
+
+    @Override
+    public List<Order> findByIDsAndDate(List<String> IDs, SearchVo searchVo) {
+        Date start = DateUtil.parse(searchVo.getStartDate());
+        Date end = DateUtil.parse(searchVo.getEndDate());
+        List<Order> orders = new ArrayList<>();
+        while (start.before(end) || start.equals(end)){
+            Order order = new Order();
+            order.setDate(start);
+            for (String id :
+                    IDs) {
+                Order order1 = orderDao.findByStaffIDAndDate(id, start);
+                if (order1 == null){
+                    continue;
+                }
+                order.setBreakfast(order.getBreakfast()+order1.getBreakfast());
+                order.setLunch(order.getLunch()+order1.getLunch());
+                order.setDinner(order.getDinner() + order1.getDinner());
+            }
+            orders.add(order);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(start);
+            cal.add(Calendar.DATE, 1);
+            start = cal.getTime();
         }
         return orders;
     }

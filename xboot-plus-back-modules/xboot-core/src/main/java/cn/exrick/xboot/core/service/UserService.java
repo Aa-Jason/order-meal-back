@@ -7,6 +7,7 @@ import cn.exrick.xboot.core.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.security.SecureRandom;
 import java.util.List;
 
 /**
@@ -68,9 +69,17 @@ public interface UserService extends XbootBaseService<User, String> {
     void updateDepartmentTitle(String departmentId, String departmentTitle);
 
     /**
-     * 根据姓名返回用户ID
-     * @param nickname
+     * 通过部门名搜索ID
+     * @param title
      * @return
      */
-    List<String>  findIdByNickname(String nickname);
+    List<String> findByDepartmentTitle(String title);
+
+    /**
+     * 通过部门名和用户名搜索ID
+     * @param nickname
+     * @param title
+     * @return
+     */
+    List<String> findByDepartmentTitleAndNickname(String title,String nickname);
 }
