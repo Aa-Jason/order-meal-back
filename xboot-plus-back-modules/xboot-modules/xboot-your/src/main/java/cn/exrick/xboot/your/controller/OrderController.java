@@ -15,6 +15,7 @@ import cn.exrick.xboot.core.service.UserService;
 import cn.exrick.xboot.your.dao.OrderDao;
 import cn.exrick.xboot.your.entity.Order;
 import cn.exrick.xboot.your.service.OrderService;
+import cn.exrick.xboot.your.vo.OrderVo;
 import cn.hutool.core.date.DateUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.Api;
@@ -85,11 +86,7 @@ public class OrderController extends XbootBaseController<Order, String> {
     }
     @RequestMapping(value = "/addOrder", method = RequestMethod.POST)
     @ApiOperation(value = "当前用户添加订餐记录")
-    public Result<Object> addOrder(List<Order> orders
-//                                   @RequestParam(value = "date")Date date,
-//                                   @RequestParam(value = "breakfast",required =true)int breakfast,
-//                                   @RequestParam(value = "lunch",required =true)int lunch,
-//                                   @RequestParam(value = "dinner",required =true)int dinner
+    public Result<Object> addOrder(OrderVo orders
                                    ) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication.getName() == null
@@ -99,7 +96,7 @@ public class OrderController extends XbootBaseController<Order, String> {
         TokenUser tokenUser = (TokenUser) authentication.getPrincipal();
         String message = "";
         for (Order o :
-                orders) {
+                orders.getOrders()) {
             if (!orderService.checkOrder(tokenUser.getId(), o.getDate())) {
                 o.setStaffID(tokenUser.getId());
                 o.setId(SnowFlakeUtil.nextId().toString());
