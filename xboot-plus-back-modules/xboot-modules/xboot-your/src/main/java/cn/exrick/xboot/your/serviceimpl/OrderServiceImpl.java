@@ -138,6 +138,9 @@ public class OrderServiceImpl implements OrderService {
             for (String id :
                     IDs) {
                 Order order1 = orderDao.findByStaffIDAndDate(id, start);
+                if (order1 == null){
+                    continue;
+                }
                 order.setBreakfast(order.getBreakfast()+order1.getBreakfast());
                 order.setLunch(order.getLunch()+order1.getLunch());
                 order.setDinner(order.getDinner() + order1.getDinner());

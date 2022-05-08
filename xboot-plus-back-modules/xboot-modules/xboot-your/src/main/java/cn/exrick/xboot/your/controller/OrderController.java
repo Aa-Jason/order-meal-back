@@ -86,17 +86,20 @@ public class OrderController extends XbootBaseController<Order, String> {
     }
     @RequestMapping(value = "/addOrder", method = RequestMethod.POST)
     @ApiOperation(value = "当前用户添加订餐记录")
-    public Result<Object> addOrder(OrderVo orders
+    @JsonFormat(pattern="yyyy-MM-dd", timezone="GMT+8")
+    public Result<Object> addOrder(@RequestBody OrderVo orders
                                    ) {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication.getName() == null
                 || authentication instanceof AnonymousAuthenticationToken) {
-            throw new XbootException("未检测到登录用户");
+            throw new XbootException("未检测到登录" );
         }
         TokenUser tokenUser = (TokenUser) authentication.getPrincipal();
         String message = "";
         for (Order o :
                 orders.getOrders()) {
+            System.out.println(orders);
             if (!orderService.checkOrder(tokenUser.getId(), o.getDate())) {
                 o.setStaffID(tokenUser.getId());
                 o.setId(SnowFlakeUtil.nextId().toString());
@@ -116,15 +119,12 @@ public class OrderController extends XbootBaseController<Order, String> {
         List<String> IDs = new ArrayList<>();
         System.out.println(nickname.isEmpty() && departmentTitle.isEmpty());
         if (nickname.isEmpty() && departmentTitle.isEmpty()){
-            System.out.println("用户名和部门名为空");
             List<Order> orders = orderService.findByDate(searchVo);
             return new ResultUtil<List<Order>>().setData(orders);
         }
         if (nickname.isEmpty()){
-            System.out.println("用户名为空");
             IDs = userService.findByDepartmentTitle(departmentTitle);
         }else {
-            System.out.println("部门名为空");
             IDs = userService.findByDepartmentTitleAndNickname(departmentTitle, nickname);
         }
 
