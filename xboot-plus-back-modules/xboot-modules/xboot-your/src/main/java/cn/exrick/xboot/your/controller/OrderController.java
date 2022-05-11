@@ -38,6 +38,7 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -120,6 +121,7 @@ public class OrderController extends XbootBaseController<Order, String> {
         System.out.println(nickname.isEmpty() && departmentTitle.isEmpty());
         if (nickname.isEmpty() && departmentTitle.isEmpty()){
             List<Order> orders = orderService.findByDate(searchVo);
+            Collections.reverse(orders);
             return new ResultUtil<List<Order>>().setData(orders);
         }
         if (nickname.isEmpty()){
@@ -129,8 +131,16 @@ public class OrderController extends XbootBaseController<Order, String> {
         }
 
         List<Order> orders = orderService.findByIDsAndDate(IDs,searchVo);
-
+        Collections.reverse(orders);
         return new ResultUtil<List<Order>>().setData(orders);
         //        orderService.findByConditions(nickname,departmentTitle,searchVo);
     }
+
+
+    @RequestMapping(value = "/getAllDate", method = RequestMethod.POST)
+    @ApiOperation(value = "返回所有订餐信息")
+    public Result<List<Order>> getAllDate(){
+        return new ResultUtil<List<Order>>().setData(orderService.findALL());
+    }
+
 }

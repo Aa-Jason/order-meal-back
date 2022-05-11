@@ -68,4 +68,8 @@ public interface OrderService extends XbootBaseService<Order, String> {
      */
     List<Order> findByIDsAndDate(List<String> IDs,SearchVo searchVo);
 
+
+    List<Order> findALL();
+
+
 }

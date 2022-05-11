@@ -9,7 +9,7 @@
     >
       <Col class="content">
         <div>
-          <Header />
+          <Header/>
           <div v-if="!socialLogining">
             <div style="position: relative">
               <Tabs v-model="tabName" @on-click="changeTab">
@@ -232,7 +232,7 @@
             <RectLoading />
           </div>
         </div>
-        <Footer />
+        
       </Col>
       <LangSwitch />
     </Row>
@@ -286,8 +286,8 @@ export default {
       sending: false,
       checkSms: true,
       form: {
-        username: "test或test2 可注册 支持第三方账号登录",
-        password: "123456",
+        username: "",
+        password: "",
         mobile: "",
         code: "",
         captchaId: "",

@@ -47,11 +47,11 @@ public class XbootVueGenerator {
                                         @RequestBody List<Field> fields,
                                         HttpServletRequest request) throws IOException {
 
-        // IP限流 在线Demo所需
-        Boolean token = redisRaterLimiter.acquireByRedis("generate:" + ipInfoUtil.getIpAddr(request), 1L, 86400000L);
-        if (!token) {
-            throw new LimitException("您今日的测试生成次数已达上限");
-        }
+//        // IP限流 在线Demo所需
+//        Boolean token = redisRaterLimiter.acquireByRedis("generate:" + ipInfoUtil.getIpAddr(request), 1L, 86400000L);
+//        if (!token) {
+//            throw new LimitException("您今日的测试生成次数已达上限");
+//        }
 
         String drawer = generate("tableDrawerIndex.btl", false, vueName, rowNum, fields);
         String drawerApi = generate("tableDrawerIndex.btl", true, vueName, rowNum, fields);
@@ -91,11 +91,11 @@ public class XbootVueGenerator {
                                        @RequestBody List<Field> fields,
                                        HttpServletRequest request) throws IOException {
 
-        // IP限流 在线Demo所需
-        Boolean token = redisRaterLimiter.acquireByRedis("generate:" + ipInfoUtil.getIpAddr(request), 1L, 86400000L);
-        if (!token) {
-            throw new LimitException("您今日的测试生成次数已达上限");
-        }
+//        // IP限流 在线Demo所需
+//        Boolean token = redisRaterLimiter.acquireByRedis("generate:" + ipInfoUtil.getIpAddr(request), 1L, 86400000L);
+//        if (!token) {
+//            throw new LimitException("您今日的测试生成次数已达上限");
+//        }
 
         String drawer = generate("tree.btl", false, true, enableTable, vueName, rowNum, fields);
         String drawerApi = generate("tree.btl", true, true, enableTable, vueName, rowNum, fields);

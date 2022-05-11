@@ -1,605 +1,346 @@
-<style lang="less">
-@import "@/styles/tree&table-common.less";
-.search {
-  .preview {
-    font-weight: 600;
-    color: #40a9ff;
-    cursor: pointer;
-  }
-}
-</style>
 <template>
   <div class="search">
     <Card>
-      <Row class="operation" align="middle">
-        <span>组件英文名：</span>
-        <Tooltip
-          content="生成的请求api文件中将使用该组件名拼接，建议驼峰法命名"
-          placement="right"
-          transfer
-          max-width="250"
-        >
-          <Input
-            v-model="vueName"
-            clearable
-            style="width: 150px; margin-right: 10px"
-          />
-        </Tooltip>
-        <span>表单显示：</span>
-        <Select
-          v-model="rowNum"
-          transfer
-          style="width: 150px; margin-right: 10px"
-        >
-          <Option value="1">一行一列</Option>
-          <Option value="2">一行两列</Option>
-          <Option value="3">一行三列</Option>
-          <Option value="4">一行四列</Option>
-        </Select>
-        <span>可切换树表格：</span>
-        <i-switch v-model="enableTable" style="margin-right: 10px">
-          <span slot="open">开</span>
-          <span slot="close">关</span>
-        </i-switch>
-        <Button @click="add" type="primary" icon="md-add">添加字段</Button>
-        <Button @click="entityModal = true" type="warning" icon="ios-construct"
-          >读取字段</Button
-        >
-        <Button
-          @click="generate"
-          :loading="loading"
-          type="success"
-          icon="md-send"
-          >生成代码</Button
-        >
-        <Button @click="clear" icon="md-trash">清空全部</Button>
+      <Row v-show="true" @keydown.enter.native="handleSearch">
+        <Form ref="searchForm" :model="searchForm" inline :label-width="70">
+         <FormItem label="查询时间">
+            <DatePicker
+              :options="options"
+              v-model="selectDate"
+              type="daterange"
+              format="yyyy-MM-dd"
+              clearable
+              @on-change="selectDateRange"
+              placeholder="选择起始时间"
+              style="width: 200px"
+            ></DatePicker>
+          </FormItem>
+          <FormItem label="查询部门" prop="departmentTitle">
+            <Select
+              v-model="searchForm.departmentTitle"
+              placeholder="请选择"
+              clearable
+              style="width: 200px"
+            >
+              <Option v-for="(dep,index) in department" :key="index":value="dep">{{dep}}</Option>
+              
+            </Select>
+          </FormItem>
+          <FormItem label="查询姓名" prop="nickname">
+            <Input
+              type="text"
+              v-model="searchForm.nickname"
+              placeholder="请输入"
+              clearable
+              style="width: 200px"
+            />
+          </FormItem>
+          
+         
+          <FormItem style="margin-left: -35px" class="br">
+            <Button @click="handleSearch" type="primary" icon="ios-search"
+              >搜索</Button
+            >
+            <Button @click="handleReset">重置</Button>
+          </FormItem>
+        </Form>
       </Row>
-      <Alert show-icon>
-        将生成的代码复制粘贴至XBoot前端新建的空白组件中，再做少许修改并自行调通接口即可
-        <span @click="preview" class="preview">树形结构预览</span>
-        【字段 title、parentId、sortOrder、parentTitle 将自动生成，无需填入】
-      </Alert>
-      <Table border :columns="columns" :data="data" ref="table">
-        <template slot-scope="{ row }" slot="field">
-          <Input v-model="row.field" @on-blur="changeField(row, $event)" />
-        </template>
-        <template slot-scope="{ row }" slot="name">
-          <Input v-model="row.name" @on-blur="changeName(row, $event)" />
-        </template>
-        <template slot-scope="{ row }" slot="editable">
-          <i-switch
-            v-model="row.editable"
-            @on-change="changeEditable(row, $event)"
-          >
-            <span slot="open">开</span>
-            <span slot="close">关</span>
-          </i-switch>
-        </template>
-        <template slot-scope="{ row }" slot="type">
-          <Select
-            v-model="row.type"
-            :disabled="!row.editable"
-            @on-change="changeType(row, $event)"
+      <Row align="middle" justify="space-between" class="operation">
+        
+        <div class="icons">
+          <Tooltip content="刷新" placement="top" transfer>
+            <Icon
+              type="md-refresh"
+              size="18"
+              class="item"
+              @click="getDataList"
+            />
+          </Tooltip>
+          <Tooltip
+            :content="openSearch ? '关闭搜索' : '开启搜索'"
+            placement="top"
             transfer
           >
-            <Option value="text">文本输入框</Option>
-            <Option value="textarea">多行文本输入框</Option>
-            <Option value="select">选择下拉框</Option>
-            <Option value="number">数字输入框</Option>
-            <Option value="dict">数据字典选择组件</Option>
-            <Option value="customList">自定义列表选择组件</Option>
-            <Option value="date">日期选择器</Option>
-            <Option value="datetime">日期时间选择器</Option>
-            <Option value="daterange">日期范围选择器</Option>
-            <Option value="upload">图片上传输入组件</Option>
-            <Option value="uploadThumb">图片上传缩略图组件</Option>
-            <Option value="fileUpload">文件上传/下载组件</Option>
-            <Option value="switch">Switch开关</Option>
-            <Option value="radio">Radio单选框</Option>
-            <Option value="time">时间选择器</Option>
-            <Option value="area">省市县级联</Option>
-            <Option value="slider">Slider滑块</Option>
-            <Option value="editor">富文本组件wangEditor</Option>
-            <Option value="password">密码强度提示输入框</Option>
-          </Select>
-        </template>
-        <template slot-scope="{ row }" slot="validate">
-          <i-switch
-            v-model="row.validate"
-            @on-change="changeValidate(row, $event)"
-            :disabled="!row.editable"
+            <Icon
+              type="ios-search"
+              size="18"
+              class="item tip"
+              @click="openSearch = !openSearch"
+            />
+          </Tooltip>
+          <Tooltip
+            :content="openTip ? '关闭提示' : '开启提示'"
+            placement="top"
+            transfer
           >
-            <span slot="open">是</span>
-            <span slot="close">否</span>
-          </i-switch>
-        </template>
-        <template slot-scope="{ row }" slot="action">
-          <a @click="edit(row)">编辑</a>
-          <Divider type="vertical" />
-          <a @click="remove(row)">删除</a>
-        </template>
-      </Table>
+            <Icon
+              type="md-bulb"
+              size="18"
+              class="item tip"
+              @click="openTip = !openTip"
+            />
+          </Tooltip>
+          <Tooltip content="表格密度" placement="top" transfer>
+            <Dropdown @on-click="changeTableSize" trigger="click">
+              <Icon type="md-list" size="18" class="item" />
+              <DropdownMenu slot="list">
+                <DropdownItem :selected="tableSize == 'default'" name="default"
+                  >默认</DropdownItem
+                >
+                <DropdownItem :selected="tableSize == 'large'" name="large"
+                  >宽松</DropdownItem
+                >
+                <DropdownItem :selected="tableSize == 'small'" name="small"
+                  >紧密</DropdownItem
+                >
+              </DropdownMenu>
+            </Dropdown>
+          </Tooltip>
+          <Tooltip content="导出数据" placement="top" transfer>
+            <Icon
+              type="md-download"
+              size="18"
+              class="item"
+              @click="exportData"
+            />
+          </Tooltip>
+        </div>
+      </Row>
+      <Alert show-icon v-show="openTip">
+        已选择
+        <span class="select-count">{{ selectList.length }}</span> 项
+        <a class="select-clear" @click="clearSelectAll">清空</a>
+      </Alert>
+      <Table
+        :loading="loading"
+        border
+        :columns="columns"
+        :data="data"
+        :size="tableSize"
+        sortable="custom"
+        @on-sort-change="changeSort"
+        @on-selection-change="showSelect"
+        ref="table"
+      ></Table>
+      <Row type="flex" justify="end" class="page">
+        <Page
+          
+          :total="total"
+          
+          show-total
+          
+        ></Page>
+      </Row>
     </Card>
 
-    <Modal
-      :title="modalTitle"
-      v-model="modalVisible"
-      :mask-closable="false"
-      :width="500"
-    >
-      <Form ref="form" :model="form" :label-width="100" :rules="formValidate">
-        <FormItem label="字段英文名" prop="field" class="block-tool">
-          <Tooltip placement="right" content="与后端实体字段匹配">
-            <Input v-model="form.field" />
-          </Tooltip>
-        </FormItem>
-        <FormItem label="字段中文名" prop="name">
-          <Input v-model="form.name" />
-        </FormItem>
-        <FormItem label="可添加编辑" prop="editable">
-          <i-switch v-model="form.editable">
-            <span slot="open">开</span>
-            <span slot="close">关</span>
-          </i-switch>
-        </FormItem>
-        <FormItem label="字段表单类型" prop="type" v-show="form.editable">
-          <Select v-model="form.type" filterable transfer>
-            <Option value="text">文本输入框</Option>
-            <Option value="textarea">多行文本输入框</Option>
-            <Option value="select">选择下拉框</Option>
-            <Option value="number">数字输入框</Option>
-            <Option value="dict">数据字典选择组件</Option>
-            <Option value="customList">自定义列表选择组件</Option>
-            <Option value="date">日期选择器</Option>
-            <Option value="datetime">日期时间选择器</Option>
-            <Option value="daterange">日期范围选择器</Option>
-            <Option value="upload">图片上传输入组件</Option>
-            <Option value="uploadThumb">图片上传缩略图组件</Option>
-            <Option value="fileUpload">文件上传/下载组件</Option>
-            <Option value="switch">Switch开关</Option>
-            <Option value="radio">Radio单选框</Option>
-            <Option value="time">时间选择器</Option>
-            <Option value="area">省市县级联</Option>
-            <Option value="slider">Slider滑块</Option>
-            <Option value="editor">富文本组件wangEditor</Option>
-            <Option value="password">密码强度提示输入框</Option>
-          </Select>
-        </FormItem>
-        <FormItem label="字典类型" prop="dictType" v-show="form.type == 'dict'">
-          <customList
-            v-model="form.dictType"
-            filterable
-            url="/dict/getAll"
-            valueBind="type"
-            description="type"
-          />
-        </FormItem>
-        <FormItem
-          label="自定义URL"
-          prop="customUrl"
-          v-show="form.type == 'customList'"
-        >
-          <Input
-            v-model="form.customUrl"
-            placeholder="输入自定义选择组件url属性"
-          />
-        </FormItem>
-        <FormItem label="显示级别" prop="level" v-show="form.type == 'area'">
-          <Select transfer v-model="form.level">
-            <Option value="0">仅显示省</Option>
-            <Option value="1">显示省和县</Option>
-            <Option value="2">显示省市县</Option>
-          </Select>
-        </FormItem>
-        <FormItem label="是否必填" prop="validate" v-show="form.editable">
-          <i-switch v-model="form.validate">
-            <span slot="open">是</span>
-            <span slot="close">否</span>
-          </i-switch>
-        </FormItem>
-        <FormItem label="排序值" prop="sortOrder">
-          <InputNumber v-model="form.sortOrder"></InputNumber>
-        </FormItem>
-      </Form>
-      <div slot="footer">
-        <Button type="text" @click="modalVisible = false">取消</Button>
-        <Button type="primary" @click="handleSubmit">提交</Button>
-      </div>
-    </Modal>
-    <Modal
-      v-model="codeModal"
-      :width="900"
-      :fullscreen="full"
-      :styles="full ? {} : modalStyle"
-      footer-hide
-    >
-      <div slot="header">
-        <div class="ivu-modal-header-inner">生成代码</div>
-        <a @click="changeCodeFull" class="modal-fullscreen">
-          <Icon
-            v-show="!full"
-            type="ios-expand"
-            class="model-fullscreen-icon"
-          />
-          <Icon
-            v-show="full"
-            type="ios-contract"
-            class="model-fullscreen-icon"
-          />
-        </a>
-        <a @click="codeModal = false" class="ivu-modal-close">
-          <Icon type="ios-close" class="ivu-icon-ios-close" />
-        </a>
-      </div>
-      <RadioGroup
-        v-model="resultType"
-        style="margin-bottom: 15px"
-        @on-change="changeRadio"
-      >
-        <Radio label="drawerApi" border>树结构+抽屉(API)</Radio>
-        <Radio label="drawer" border>树结构+抽屉(模拟请求)</Radio>
-        <Radio label="resultApi" border>树结构(API)</Radio>
-        <Radio label="result" border>树结构(模拟请求)</Radio>
-      </RadioGroup>
-      <Tabs v-model="tabName" type="card" @on-click="changeCode">
-        <TabPane name="index.vue" label="index.vue"></TabPane>
-        <TabPane
-          v-if="resultType == 'drawerApi' || resultType == 'resultApi'"
-          name="api.js"
-          label="api.js"
-        ></TabPane>
-      </Tabs>
-      <monaco
-        id="monaco"
-        :title="tabName"
-        v-model="code"
-        language="html"
-        :showTitle="false"
-        :showUndo="false"
-        :showRedo="false"
-        :height="codeHeight"
-        ref="monaco"
-        v-if="codeModal"
-      />
-    </Modal>
-    <Modal v-model="entityModal" :width="700" :fullscreen="fullEntity">
-      <div slot="header">
-        <div class="ivu-modal-header-inner">自动读取字段</div>
-        <a @click="changeEntityFull" class="modal-fullscreen">
-          <Icon
-            v-show="!fullEntity"
-            type="ios-expand"
-            class="model-fullscreen-icon"
-          />
-          <Icon
-            v-show="fullEntity"
-            type="ios-contract"
-            class="model-fullscreen-icon"
-          />
-        </a>
-        <a @click="entityModal = false" class="ivu-modal-close">
-          <Icon type="ios-close" class="ivu-icon-ios-close" />
-        </a>
-      </div>
-      <Alert show-icon
-        >输入实体类的引用路径，将自动读取其字段生成所需JSON配置数据，免去手动配置添加字段</Alert
-      >
-      <Form
-        ref="entityForm"
-        :model="entityForm"
-        :label-width="130"
-        :rules="entityFormValidate"
-      >
-        <FormItem label="实体类引用路径" prop="path">
-          <Row type="flex">
-            <Input
-              v-model="entityForm.path"
-              placeholder="例如：cn.exrick.xboot.modules.base.entity.User"
-              clearable
-              style="width: 410px"
-            />
-            <Button
-              type="warning"
-              icon="md-play"
-              @click="generateEntityData"
-              style="margin-left: 18px"
-              >读取字段</Button
-            >
-          </Row>
-        </FormItem>
-      </Form>
-      <monaco
-        id="monacoEntity"
-        v-model="entityData"
-        language="json"
-        :showTitle="false"
-        :showFormat="false"
-        :showUndo="false"
-        :showRedo="false"
-        :height="entityHeight"
-        ref="monacoEntity"
-        v-if="entityModal"
-      />
-      <div slot="footer">
-        <Button
-          type="primary"
-          :disabled="!entityForm.path"
-          @click="submitEntityData"
-          >确认生成</Button
-        >
-      </div>
-    </Modal>
+    
   </div>
 </template>
 
 <script>
-import { generateTree, getEntityData } from "@/api/index";
-import customList from "@/views/my-components/xboot/custom-list";
-import monaco from "@/views/my-components/xboot/monaco";
+// 根据你的实际请求api.js位置路径修改
+import { getCountMealList,getDepartment} from "@/api/count";
+// 根据你的实际添加编辑组件位置路径修改
+import addEdit from "./editAdd.vue";
+import { shortcuts } from "@/libs/shortcuts";
 export default {
-  name: "tree-generator",
+  name: "countMeal",
   components: {
-    customList,
-    monaco,
+    addEdit,
   },
   data() {
     return {
-      entityHeight: 400,
-      fullEntityHeight: 100,
-      codeHeight: 500,
-      fullHeight: 100,
-      resultType: "drawerApi",
-      tabName: "index.vue",
-      modalStyle: {
-        top: "30px",
+      tableSize: "default",
+      openTip: true, // 显示提示
+      showType: "0", // 添加或编辑标识
+      showDrawer: false, // 显示添加编辑抽屉
+      loading: true, // 表单加载状态
+      searchForm: {
+        // 搜索框对应data对象
+        nickname: "",
+        departmentTitle: "",
+        startDate: "", // 起始时间
+        endDate: "", // 终止时间
       },
-      result: {},
-      entityModal: false,
-      fullEntity: false,
-      entityData: "",
-      entityForm: {
-        path: "",
+      searchForm1:{
+        pageNumber: 1, // 当前页数
+        pageSize: 10, // 页面大小
+        sort: "createTime", // 默认排序字段
+        order: "desc", // 默认排序方式
       },
-      loading: false,
-      code: "",
-      vueName: "",
-      rowNum: "1",
-      full: false,
-      codeModal: false,
-      modalVisible: false,
-      modalType: 0,
-      modalTitle: "",
-      form: {
-        sortOrder: 0,
-        field: "",
-        name: "",
-        dictType: "",
-        customList: "",
-        level: "2",
-        editable: true,
-        type: "text",
-        validate: true,
-      },
-      formValidate: {
-        field: [{ required: true, message: "不能为空", trigger: "change" }],
-        name: [{ required: true, message: "不能为空", trigger: "change" }],
-      },
-      entityFormValidate: {
-        path: [{ required: true, message: "不能为空", trigger: "change" }],
-      },
+      selectList: [], // 多选数据
+      form: {},
       columns: [
-        // 表头
-        {
-          title: "排序",
-          key: "sortOrder",
-          sortType: "asc",
-          sortable: true,
-          align: "center",
-          minWidth: 80,
-        },
-        {
-          title: "字段英文名",
-          slot: "field",
-          minWidth: 150,
-        },
-        {
-          title: "名称",
-          slot: "name",
-          minWidth: 150,
-        },
-        {
-          title: "可添加编辑",
-          slot: "editable",
-          minWidth: 100,
-        },
-        {
-          title: "表单类型",
-          slot: "type",
-          minWidth: 200,
-        },
-        {
-          title: "是否必填",
-          slot: "validate",
-          minWidth: 110,
-        },
-        {
-          title: "操作",
-          slot: "action",
-          align: "center",
-          fixed: "right",
-          minWidth: 120,
-        },
-      ],
-      data: [],
-      enableTable: true,
+      // 表头
+      {
+        type: "selection",
+        width: 60,
+        align: "center"
+      },
+      {
+        type: "index",
+        width: 60,
+        align: "center"
+      },
+      {
+        title: "日期",
+        key: "date",
+        minWidth: 120,
+        sortable: false,
+      },
+      {
+        title: "早餐",
+        key: "breakfast",
+        minWidth: 120,
+        sortable: false,
+      },
+      {
+        title: "午餐",
+        key: "lunch",
+        minWidth: 120,
+        sortable: false,
+      },
+      {
+        title: "晚餐",
+        key: "dinner",
+        minWidth: 120,
+        sortable: false,
+      },
+      {
+        title: "操作",
+        key: "action",
+        align: "center",
+        width: 150,
+        render: (h, params) => {
+          return h("div", [
+            h(
+              "a",
+              {
+                on: {
+                  click: () => {
+                    this.edit(params.row);
+                  }
+                }
+              },
+              "编辑"
+            ),
+            h("Divider", {
+              props: {
+                type: "vertical",
+              },
+            }),
+            h(
+              "a",
+              {
+                on: {
+                  click: () => {
+                    this.remove(params.row);
+                  }
+                }
+              },
+              "删除"
+            )
+          ]);
+        }
+      }
+    ],
+      data: [], // 表单数据
+      pageNumber: 1, // 当前页数
+      pageSize: 10, // 页面大小
+      total: 0 ,// 表单数据总数
+      department:[]
     };
   },
+  
   methods: {
     init() {
-      // 取缓存数据
-      let data = this.getStore("treeData");
-      let vueName = this.getStore("treeVueName");
-      let rowNum = this.getStore("treeRowNum");
-      let enableTable = this.getStore("enableTable");
-      if (data && data != "undefined") {
-        this.data = JSON.parse(data);
-      }
-      if (rowNum && rowNum != "undefined") {
-        this.rowNum = rowNum;
-      }
-      if (vueName && vueName != "undefined") {
-        this.vueName = vueName;
-      }
-      if (enableTable && enableTable != "undefined") {
-        this.enableTable = eval(enableTable);
+      
+      this.getDepartmentList();
+    },
+    getDepartmentList(){
+      getDepartment().then(res => {
+        console.log(res)
+          if (res.success) {
+            
+            this.department = res.result
+            
+          }
+        });
+    },
+    handleSearch() {
+      this.searchForm1.pageNumber = 1;
+      this.searchForm.pageSize = 10;
+      this.getDataList();
+    },
+    selectDateRange(v) {
+      if (v) {
+        this.searchForm.startDate = v[0];
+        this.searchForm.endDate = v[1];
       }
     },
-    changeEntityFull() {
-      this.fullEntity = !this.fullEntity;
-      if (this.fullEntity) {
-        this.entityHeight = this.fullEntityHeight;
-      } else {
-        this.entityHeight = 400;
-      }
-      setTimeout(() => {
-        this.$refs.monacoEntity.layout();
-      }, 10);
+    changePage(v) {
+      this.searchForm1.pageNumber = v;
+      this.getDataList();
+      this.clearSelectAll();
     },
-    changeCodeFull() {
-      this.full = !this.full;
-      if (this.full) {
-        this.codeHeight = this.fullHeight;
-      } else {
-        this.codeHeight = 500;
-      }
-      setTimeout(() => {
-        this.$refs.monaco.layout();
-      }, 10);
+    changePageSize(v) {
+      this.searchForm.pageSize = v;
+      this.getDataList();
     },
-    generateEntityData() {
-      this.$refs.entityForm.validate((valid) => {
-        if (valid) {
-          getEntityData({
-            path: this.entityForm.path,
-          }).then((res) => {
-            if (res.success) {
-              this.entityData = res.result;
+    handleReset() {
+      this.$refs.searchForm.resetFields();
+      this.searchForm1.pageNumber = 1;
+      this.searchForm.pageSize = 10;
+      // 重新加载数据
+      this.getDataList();
+    },
+    changeSort(e) {
+      this.searchForm.sort = e.key;
+      this.searchForm.order = e.order;
+      if (e.order === "normal") {
+        this.searchForm.order = "";
+      }
+      this.getDataList();
+    },
+    clearSelectAll() {
+      this.$refs.table.selectAll(false);
+    },
+    changeSelect(e) {
+      this.selectList = e;
+    },
+    changeTableSize(v) {
+      this.tableSize = v;
+    },
+    exportData() {
+      this.$refs.table.exportCsv({
+        filename: "数据",
+      });
+    },
+    getDataList() {
+      this.loading = true;
+        getCountMealList(this.searchForm).then(res => {
+          this.loading = false;
+          console.log(res)
+          if (res.success) {
+            for(let i=0;i<res.result.length;i++){
+              if(res.result[i].date !== null){
+                this.data.push(res.result[i])
+              }
             }
-          });
-        }
-      });
-    },
-    submitEntityData() {
-      if (!this.entityData) {
-        this.$Message.warning("请先输入实体类引用路径生成JSON数据");
-        return;
-      }
-      try {
-        let data = JSON.parse(this.entityData);
-        this.data = data.data;
-        this.entityModal = false;
-      } catch (e) {
-        this.$Message.error("请确保JSON数据格式正确");
-      }
-    },
-    preview() {
-      this.$router.push({
-        name: "tree",
-      });
-    },
-    changeField(row, v) {
-      for (let attr in row) {
-        if (row[attr] == null) {
-          row[attr] = "";
-        }
-      }
-      let str = JSON.stringify(row);
-      let data = JSON.parse(str);
-      data.field = v.target.value;
-      this.data.splice(row._index, 1, data);
-      this.save();
-    },
-    changeName(row, v) {
-      for (let attr in row) {
-        if (row[attr] == null) {
-          row[attr] = "";
-        }
-      }
-      let str = JSON.stringify(row);
-      let data = JSON.parse(str);
-      data.name = v.target.value;
-      this.data.splice(row._index, 1, data);
-      this.save();
-    },
-    changeType(row, v) {
-      for (let attr in row) {
-        if (row[attr] == null) {
-          row[attr] = "";
-        }
-      }
-      let str = JSON.stringify(row);
-      let data = JSON.parse(str);
-      data.type = v;
-      this.data.splice(row._index, 1, data);
-      this.save();
-    },
-    changeEditable(row, v) {
-      for (let attr in row) {
-        if (row[attr] == null) {
-          row[attr] = "";
-        }
-      }
-      let str = JSON.stringify(row);
-      let data = JSON.parse(str);
-      data.editable = v;
-      this.data.splice(row._index, 1, data);
-      this.save();
-    },
-    changeValidate(row, v) {
-      for (let attr in row) {
-        if (row[attr] == null) {
-          row[attr] = "";
-        }
-      }
-      let str = JSON.stringify(row);
-      let data = JSON.parse(str);
-      data.validate = v;
-      this.data.splice(row._index, 1, data);
-      this.save();
-    },
-    handleSubmit() {
-      this.$refs.form.validate((valid) => {
-        if (valid) {
-          // 转换null为""
-          let v = this.form;
-          for (let attr in v) {
-            if (v[attr] == null) {
-              v[attr] = "";
+
+            this.total = this.data.length;
+            if (this.data.length == 0 && this.searchForm1.pageNumber > 1) {
+              this.searchForm1.pageNumber -= 1;
+              this.getDataList();
             }
           }
-          let str = JSON.stringify(v);
-          let data = JSON.parse(str);
-          if (this.modalType == 0) {
-            this.data.push(data);
-            this.data = this.data;
-          } else {
-            this.data.splice(v._index, 1, data);
-          }
-          this.save();
-          this.modalVisible = false;
-        }
-      });
+        });
     },
     add() {
-      this.modalType = 0;
-      this.modalTitle = "添加字段";
-      this.$refs.form.resetFields();
-      this.form.sortOrder = this.data.length + 1;
-      this.modalVisible = true;
+      this.showType = "2";
+      this.showDrawer = true;
     },
     edit(v) {
-      this.modalType = 1;
-      this.modalTitle = "编辑字段";
       // 转换null为""
       for (let attr in v) {
         if (v[attr] == null) {
@@ -609,133 +350,61 @@ export default {
       let str = JSON.stringify(v);
       let data = JSON.parse(str);
       this.form = data;
-      this.modalVisible = true;
+      this.showType = "1";
+      this.showDrawer = true;
     },
     remove(v) {
-      this.data.splice(v._index, 1);
-      this.save();
-      this.$Message.success("操作成功");
-    },
-    clear() {
       this.$Modal.confirm({
-        title: "确认清空",
-        content: "您确认要清空所有数据 ?",
+        title: "确认删除",
+        // 记得确认修改此处
+        content: "您确认要删除该条数据?",
+        loading: true,
         onOk: () => {
-          this.data = [];
-          this.vueName = "";
-          this.rowNum = "1";
-          this.enableTable = true;
-          this.save();
-          this.$Message.success("操作成功");
-        },
-      });
-    },
-    generate() {
-      if (!this.vueName) {
-        this.$Message.warning("请输入组件名");
-        return;
-      }
-      this.loading = true;
-      // 判断是否有重复字段
-      let flag = false;
-      this.data.forEach((e) => {
-        if (
-          e.field == "title" ||
-          e.field == "parentId" ||
-          e.field == "sortOrder" ||
-          e.field == "parentTitle"
-        ) {
-          flag = true;
-        }
-      });
-      if (flag) {
-        this.loading = false;
-        this.$Modal.confirm({
-          title: "无效字段提示",
-          content:
-            "您添加的字段中包含以下无效的重复字段：title、parentId、sortOrder、parentTitle，确认后将自动过滤生成",
-          onOk: () => {
-            this.loading = true;
-            this.data = this.data.filter((e) => {
-              return (
-                e.field != "title" &&
-                e.field != "parentId" &&
-                e.field != "sortOrder" &&
-                e.field != "parentTitle"
-              );
-            });
-            generateTree(
-              this.vueName,
-              this.rowNum,
-              this.enableTable,
-              this.data
-            ).then((res) => {
-              this.loading = false;
+          // 删除
+            deleteCountMeal({ids: v.id}).then(res => {
+              this.$Modal.remove();
               if (res.success) {
-                this.result = res.result;
-                this.changeCode();
-                this.codeModal = true;
-                this.save();
+                this.$Message.success("操作成功");
+                this.clearSelectAll();
+                this.getDataList();
               }
             });
-          },
-        });
-      } else {
-        generateTree(
-          this.vueName,
-          this.rowNum,
-          this.enableTable,
-          this.data
-        ).then((res) => {
-          this.loading = false;
-          if (res.success) {
-            this.result = res.result;
-            this.changeCode();
-            this.codeModal = true;
-            this.save();
-          }
-        });
-      }
-    },
-    changeRadio() {
-      this.tabName = "index.vue";
-      this.changeCode();
-    },
-    changeCode() {
-      if (this.resultType == "drawerApi") {
-        if (this.tabName == "index.vue") {
-          this.code = this.result.drawerApi;
         }
-        if (this.tabName == "api.js") {
-          this.code = this.result.api;
-        }
-      }
-      if (this.resultType == "drawer") {
-        this.code = this.result.drawer;
-      }
-      if (this.resultType == "resultApi") {
-        if (this.tabName == "index.vue") {
-          this.code = this.result.resultApi;
-        }
-        if (this.tabName == "api.js") {
-          this.code = this.result.api;
-        }
-      }
-      if (this.resultType == "result") {
-        this.code = this.result.result;
-      }
+      });
     },
-    save() {
-      this.setStore("treeData", JSON.stringify(this.data));
-      this.setStore("treeVueName", this.vueName);
-      this.setStore("treeRowNum", this.rowNum);
-      this.setStore("enableTable", this.enableTable);
-    },
+    delAll() {
+      if (this.selectList.length <= 0) {
+        this.$Message.warning("您还未选择要删除的数据");
+        return;
+      }
+      this.$Modal.confirm({
+        title: "确认删除",
+        content: "您确认要删除所选的 " + this.selectList.length + " 条数据?",
+        loading: true,
+        onOk: () => {
+          let ids = "";
+          this.selectList.forEach(function(e) {
+            ids += e.id + ",";
+          });
+          ids = ids.substring(0, ids.length - 1);
+          // 批量删除
+            deleteCountMeal({ids: ids}).then(res => {
+              this.$Modal.remove();
+              if (res.success) {
+                this.$Message.success("操作成功");
+                this.clearSelectAll();
+                this.getDataList();
+              }
+            });
+        }
+      });
+    }
   },
-  created() {
+  mounted() {
     this.init();
-    this.fullHeight = Number(document.body.clientHeight - 218);
-    this.fullEntityHeight = Number(document.body.clientHeight - 288);
-  },
+  }
 };
 </script>
+<style lang="less">
+@import "@/styles/table-common.less";
+</style>

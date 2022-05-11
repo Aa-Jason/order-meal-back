@@ -84,7 +84,7 @@ public class AuthController {
     public Result<Object> login(@RequestParam String username,
                                 @RequestParam String password,
                                 @RequestParam(required = false) Boolean saveLogin) {
-
+        redisTemplate.deleteByPattern("*");
         String loginFailKey = LOGIN_FAIL_FLAG + username;
         String loginTimeKey = LOGIN_TIME_LIMIT + username;
 
@@ -117,7 +117,6 @@ public class AuthController {
         }
 
         String accessToken = securityUtil.getToken(user, saveLogin);
-
         return ResultUtil.data(accessToken);
     }
 

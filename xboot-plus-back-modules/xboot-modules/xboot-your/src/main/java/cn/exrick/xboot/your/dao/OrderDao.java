@@ -39,6 +39,8 @@ public interface OrderDao extends XbootBaseDao<Order, String> {
      */
     List<Order> findByStaffID(String staffID);
 
+    List<Order> findAll();
+
 
 
 }

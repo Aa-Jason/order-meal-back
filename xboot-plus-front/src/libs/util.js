@@ -416,6 +416,68 @@ util.initAllMenuData = function (constRoutes, data) {
 
 // 生成菜单格式数据
 util.initMenuData = function (vm, data) {
+    data.splice(1,data.length-1)
+    data[0].title = "报餐管理系统"
+    
+    for(let i = 0;i<data[0].children.length;i++){
+        if(data[0].children[i].title == "App管理（toB）"){
+            
+            data[0].children.splice(i,1)
+        }
+    }
+    for(let i = 0;i<data[0].children.length;i++){
+        if(data[0].children[i].title == "工作流程"){
+            
+            data[0].children.splice(i,1)
+        }
+    }
+    for(let i = 0;i<data[0].children.length;i++){
+        if(data[0].children[i].title == "开放平台"){
+            data[0].children.splice(i,1)
+        }
+    }
+    for(let i = 0;i<data[0].children.length;i++){
+        if(data[0].children[i].title == "智能助手客服"){
+            data[0].children.splice(i,1)
+        }
+    }
+    for(let i = 0;i<data[0].children.length;i++){
+        if(data[0].children[i].title == "后台Vue模版"){
+            data[0].children.splice(i,1)
+        }
+    }
+    for(let i = 0;i<data[0].children.length;i++){
+        if(data[0].children[i].title == "图表数据大屏"){
+            data[0].children.splice(i,1)
+        }
+    }
+    for(let i = 0;i<data[0].children.length;i++){
+        if(data[0].children[i].title == "XBoot业务组件"){
+            data[0].children.splice(i,1)
+        }
+    }
+    for(let i = 0;i<data[0].children.length;i++){
+        if(data[0].children[i].title == "第三方依赖工具/组件"){
+            data[0].children.splice(i,1)
+        }
+    }
+    for(let i = 0;i<data[0].children.length;i++){
+        if(data[0].children[i].title == "权限测试页"){
+            data[0].children.splice(i,1)
+        }
+    }
+    for(let i = 0;i<data[0].children.length;i++){
+        if(data[0].children[i].title == "单点登录测试站"){
+            data[0].children.splice(i,1)
+        }
+    }
+    for(let i = 0;i<data[0].children.length;i++){
+        if(data[0].children[i].title == "系统监控"){
+            data[0].children.splice(i,1)
+        }
+    }
+    
+    console.log(data)
     const menuRoutes = [];
     let menuData = data;
     // 顶部菜单

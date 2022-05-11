@@ -6,8 +6,8 @@
         width="220px"
         v-if="mainTheme == 'darkMode'"
       />
-      <img src="@/assets/logo-black.png" width="220px" v-else />
-      <div class="description">{{ $t("xboot") }}</div>
+      
+      <div style="font-size:30px">欢迎来到报餐管理系统</div>
     </div>
   </div>
 </template>

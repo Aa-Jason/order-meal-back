@@ -20,12 +20,7 @@
         :menu-list="menuList"
       >
         <div slot="top" class="logo-content" v-if="showLogo || fixNav">
-          <img
-            v-show="
-              !shrink && (menuTheme != 'light' || mainTheme == 'darkMode')
-            "
-            src="@/assets/logo-white.png"
-          />
+          
           <img
             v-show="!shrink && menuTheme == 'light' && mainTheme != 'darkMode'"
             src="@/assets/logo-black.png"

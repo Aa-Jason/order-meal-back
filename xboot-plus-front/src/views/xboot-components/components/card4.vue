@@ -16,7 +16,7 @@
           "
           title="最新公告"
           time="2021年05月27日"
-          description="XBoot是很棒的前后端分离一站式快速开发平台"
+          description="报餐管理系统"
         />
       </Col>
       <Col :sm="24" :md="24" :lg="8" :style="{ marginBottom: '10px' }">
@@ -30,7 +30,7 @@
           timeSize="14px"
           timeBottom="16px"
           timeColor="#975ee4"
-          description="XBoot是很棒的前后端分离一站式快速开发平台，全新版本已发布"
+          description="报餐管理系统"
       /></Col>
     </Row>
 

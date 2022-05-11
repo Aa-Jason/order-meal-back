@@ -24,6 +24,7 @@ import javax.persistence.criteria.*;
  * 点餐接口实现
  * @author Exrick
  */
+
 @Slf4j
 @Service
 @Transactional
@@ -36,6 +37,9 @@ public class OrderServiceImpl implements OrderService {
     public OrderDao getRepository() {
         return orderDao;
     }
+
+
+
 
     @Override
     public Page<Order> findByCondition(Order order, SearchVo searchVo, Pageable pageable) {
@@ -151,6 +155,13 @@ public class OrderServiceImpl implements OrderService {
             cal.add(Calendar.DATE, 1);
             start = cal.getTime();
         }
+        return orders;
+    }
+
+    @Override
+    public List<Order> findALL() {
+        List<Order> orders = orderDao.findAll();
+        Collections.reverse(orders);
         return orders;
     }
 }
